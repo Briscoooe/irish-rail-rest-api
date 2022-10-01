@@ -1,15 +1,4 @@
 [[package]]
-name = "aniso8601"
-version = "9.0.1"
-description = "A library for parsing ISO 8601 strings."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.extras]
-dev = ["black", "coverage", "isort", "pre-commit", "pyenchant", "pylint"]
-
-[[package]]
 name = "apiflask"
 version = "1.1.3"
 description = "A lightweight web API framework based on Flask and marshmallow-code projects."
@@ -36,9 +25,6 @@ description = "A pluggable API specification generator. Currently supports the O
 category = "main"
 optional = false
 python-versions = ">=3.7"
-
-[package.dependencies]
-marshmallow = {version = ">=3.13.0", optional = true, markers = "extra == \"marshmallow\""}
 
 [package.extras]
 dev = ["PyYAML (>=3.10)", "prance[osv] (>=0.11)", "marshmallow (>=3.13.0)", "pytest", "mock", "flake8 (==4.0.1)", "flake8-bugbear (==22.4.25)", "pre-commit (>=2.4,<3.0)", "mypy (==0.950)", "types-pyyaml", "tox"]
@@ -115,20 +101,6 @@ async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
 
 [[package]]
-name = "flask-apispec"
-version = "0.11.4"
-description = "Build and document REST APIs with Flask and apispec"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-apispec = ">=4.0.0"
-flask = ">=0.10.1"
-marshmallow = ">=3.0.0"
-webargs = ">=6.0.0"
-
-[[package]]
 name = "flask-httpauth"
 version = "4.7.0"
 description = "HTTP authentication for Flask routes"
@@ -158,43 +130,6 @@ docs = ["marshmallow-sqlalchemy (>=0.13.0)", "Sphinx (==3.2.1)", "sphinx-issues 
 lint = ["flake8 (==3.8.3)", "pre-commit (>=2.4,<3.0)", "flake8-bugbear (==20.1.4)"]
 sqlalchemy = ["flask-sqlalchemy", "marshmallow-sqlalchemy (>=0.13.0,<0.19.0)", "marshmallow-sqlalchemy (>=0.13.0)"]
 tests = ["flask-sqlalchemy", "pytest", "mock", "marshmallow-sqlalchemy (>=0.13.0,<0.19.0)", "marshmallow-sqlalchemy (>=0.13.0)"]
-
-[[package]]
-name = "flask-restful"
-version = "0.3.9"
-description = "Simple framework for creating REST APIs"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-aniso8601 = ">=0.82"
-Flask = ">=0.8"
-pytz = "*"
-six = ">=1.3.0"
-
-[package.extras]
-docs = ["sphinx"]
-
-[[package]]
-name = "flask-smorest"
-version = "0.39.0"
-description = "Flask/Marshmallow-based REST API framework"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-apispec = {version = ">=5.1.0,<6", extras = ["marshmallow"]}
-flask = ">=2.0,<3"
-marshmallow = ">=3.13.0,<4"
-webargs = ">=8.0.0,<9"
-werkzeug = ">=2.0,<3"
-
-[package.extras]
-dev = ["pytest (==7.1.2)", "pytest-cov (==3.0.0)", "coverage (==6.4.3)", "werkzeug (==2.2.2)", "flask (==2.2.2)", "marshmallow (==3.17.0)", "webargs (==8.2.0)", "apispec (==5.2.2)", "PyYAML (==6.0)", "flake8 (==5.0.4)", "flake8-bugbear (==22.7.1)", "pre-commit (==2.20.0)"]
-lint = ["flake8 (==5.0.4)", "flake8-bugbear (==22.7.1)", "pre-commit (==2.20.0)"]
-tests = ["pytest (==7.1.2)", "pytest-cov (==3.0.0)", "coverage (==6.4.3)", "werkzeug (==2.2.2)", "flask (==2.2.2)", "marshmallow (==3.17.0)", "webargs (==8.2.0)", "apispec (==5.2.2)", "PyYAML (==6.0)"]
 
 [[package]]
 name = "idna"
@@ -290,14 +225,6 @@ python-versions = ">=3.6.8"
 diagrams = ["railroad-diagrams", "jinja2"]
 
 [[package]]
-name = "pytz"
-version = "2022.2.1"
-description = "World timezone definitions, modern and historical"
-category = "main"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "requests"
 version = "2.28.1"
 description = "Python HTTP for Humans."
@@ -384,10 +311,9 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "baa6ad3183812b798aa47661d0c3517887c5d6ebb69346c719b9266189579bdf"
+content-hash = "292295570bb41f003bfbaf11bd99e683219f6b8524067cb644a92407752ca0d4"
 
 [metadata.files]
-aniso8601 = []
 apiflask = []
 apispec = []
 certifi = []
@@ -402,11 +328,8 @@ colorama = [
 ]
 defusedxml = []
 flask = []
-flask-apispec = []
 flask-httpauth = []
 flask-marshmallow = []
-flask-restful = []
-flask-smorest = []
 idna = []
 importlib-metadata = [
     {file = "importlib_metadata-4.12.0-py3-none-any.whl", hash = "sha256:7401a975809ea1fdc658c3aa4f78cc2195a0e019c5cbc4c06122884e9ae80c23"},
@@ -468,7 +391,6 @@ pyparsing = [
     {file = "pyparsing-3.0.9-py3-none-any.whl", hash = "sha256:5026bae9a10eeaefb61dab2f09052b9f4307d44aee4eda64b309723d8d206bbc"},
     {file = "pyparsing-3.0.9.tar.gz", hash = "sha256:2b020ecf7d21b687f219b71ecad3631f644a47f01403fa1d1036b0c6416d70fb"},
 ]
-pytz = []
 requests = []
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
