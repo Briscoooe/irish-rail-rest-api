@@ -1,9 +1,6 @@
 # fly.toml file generated for irish-rail-json-api on 2022-10-01T13:29:55+01:00
 app = "irish-rail-json-api"
 kill_signal = "SIGINT"
-app = "hellofly-python"
-
-kill_signal = "SIGINT"
 kill_timeout = 5
 
 [[services]]
