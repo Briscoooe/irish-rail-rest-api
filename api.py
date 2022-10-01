@@ -1,11 +1,16 @@
 from apiflask import APIFlask
 from marshmallow.fields import Date, Enum, Integer, String
-from marshmallow.validate import Range
+from marshmallow.validate import Range, OneOf
 
 import irish_rail_service
 from enums import StationType
-from schemas import (Station, StationFilterResult, StationInformation, Train,
-                     TrainMovement)
+from schemas import (
+    Station,
+    StationFilterResult,
+    StationInformation,
+    Train,
+    TrainMovement,
+)
 
 app = APIFlask(__name__, title="Irish Rail JSON API (Unofficial)", version="1.0.0")
 
@@ -58,7 +63,21 @@ def filter_stations(query):
 @app.get("/trains")
 @app.input(
     {
-        "station_type": Enum(required=False, enum=StationType, default=StationType.A),
+        "station_type": Enum(
+            required=False,
+            enum=StationType,
+            default=StationType.A,
+            validate=[
+                OneOf(
+                    [
+                        StationType.A.value,
+                        StationType.D.value,
+                        StationType.S.value,
+                        StationType.M.value,
+                    ]
+                )
+            ],
+        ),
     },
     location="query",
 )

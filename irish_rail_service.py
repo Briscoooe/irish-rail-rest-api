@@ -82,7 +82,9 @@ def get_station_information(station_code: str, num_mins: int) -> List[Dict[str, 
             ],
             station_el,
         )
-        station["train_date"] = datetime.strptime(station["train_date"], "%d %b %Y")
+        station["train_date"] = str(
+            datetime.strptime(station["train_date"], "%d %b %Y")
+        )
         station_data.append(station)
     return station_data
 
