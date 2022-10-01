@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Dict, List
 
 import requests
+from defusedxml import ElementTree
 from defusedxml.ElementTree import fromstring
 from requests import Response
 
@@ -11,11 +12,15 @@ API_BASE_URL = "http://api.irishrail.ie/realtime/realtime.asmx"
 XML_TAG_PREFIX = "{http://api.irishrail.ie/realtime/}"
 
 
-def get_stations(type: StationType) -> List[Dict[str, str]]:
-    stations_url = f"{API_BASE_URL}/getAllStationsXML_WithStationType?StationType={str(type.value)}"
-    response: Response = requests.get(stations_url)
+def get_iterable_dom_tree(url: str) -> ElementTree:
+    response: Response = requests.get(url)
     xml_string = response.text
-    dom_tree = fromstring(xml_string)
+    return fromstring(xml_string)
+
+
+def get_stations(type: StationType) -> List[Dict[str, str]]:
+    url = f"{API_BASE_URL}/getAllStationsXML_WithStationType?StationType={str(type.value)}"
+    dom_tree = get_iterable_dom_tree(url)
     stations = []
     for station_el in dom_tree:
 
@@ -54,9 +59,7 @@ def get_stations(type: StationType) -> List[Dict[str, str]]:
 
 def get_station_information(station_code: str, num_mins: int) -> List[Dict[str, str]]:
     url = f"{API_BASE_URL}/getStationDataByCodeXML_WithNumMins?StationCode={station_code}&NumMins={num_mins}"
-    response: Response = requests.get(url)
-    xml_string = response.text
-    dom_tree = fromstring(xml_string)
+    dom_tree = get_iterable_dom_tree(url)
     station_data = []
     for station_el in dom_tree:
         train_code = ""
@@ -150,9 +153,7 @@ def get_station_information(station_code: str, num_mins: int) -> List[Dict[str, 
 
 def filter_stations(text: str) -> List[Dict[str, str]]:
     url = f"{API_BASE_URL}/getStationsFilterXML?StationText={text}"
-    response: Response = requests.get(url)
-    xml_string = response.text
-    dom_tree = fromstring(xml_string)
+    dom_tree = get_iterable_dom_tree(url)
     stations = []
 
     for station_el in dom_tree:
@@ -178,13 +179,10 @@ def filter_stations(text: str) -> List[Dict[str, str]]:
 
 
 def get_trains(type: StationType) -> List[Dict[str, str]]:
-    trains_url = (
+    url = (
         f"{API_BASE_URL}/getCurrentTrainsXML_WithTrainType?TrainType={str(type.value)}"
     )
-
-    response: Response = requests.get(trains_url)
-    xml_string = response.text
-    dom_tree = fromstring(xml_string)
+    dom_tree = get_iterable_dom_tree(url)
     trains = []
     for train_el in dom_tree:
         status = ""
@@ -225,10 +223,8 @@ def get_trains(type: StationType) -> List[Dict[str, str]]:
 
 
 def get_train_movements(train_code: str, date: datetime) -> List[Dict[str, str]]:
-    movements_url = f"{API_BASE_URL}/getTrainMovementsXML?TrainId={train_code}&TrainDate={date.strftime('%d %m %Y')}"
-    response: Response = requests.get(movements_url)
-    xml_string = response.text
-    dom_tree = fromstring(xml_string)
+    url = f"{API_BASE_URL}/getTrainMovementsXML?TrainId={train_code}&TrainDate={date.strftime('%d %m %Y')}"
+    dom_tree = get_iterable_dom_tree(url)
     movements = []
     for movement_el in dom_tree:
         code = ""

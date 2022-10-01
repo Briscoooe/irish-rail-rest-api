@@ -4,8 +4,13 @@ from marshmallow.fields import Date, Enum
 
 import irish_rail_service
 from enums import StationType, TrainStatus
-from schemas import (Station, StationFilterResult, StationInformation, Train,
-                     TrainMovement)
+from schemas import (
+    Station,
+    StationFilterResult,
+    StationInformation,
+    Train,
+    TrainMovement,
+)
 
 app = APIFlask(__name__)
 
