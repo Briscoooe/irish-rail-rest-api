@@ -13,6 +13,8 @@ class Station(Schema):
 
 
 class StationInformation(Schema):
+    # https: // apiflask.com / openapi /
+    #     name = String(metadata={'description': 'The name of the pet.'})
     train_code = String()
     station_full_name = String()
     station_code = String()

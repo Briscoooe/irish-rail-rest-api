@@ -67,16 +67,6 @@ def filter_stations(query):
             required=False,
             enum=StationType,
             default=StationType.A,
-            validate=[
-                OneOf(
-                    [
-                        StationType.A.value,
-                        StationType.D.value,
-                        StationType.S.value,
-                        StationType.M.value,
-                    ]
-                )
-            ],
         ),
     },
     location="query",

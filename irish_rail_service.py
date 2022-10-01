@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Dict, List
 
@@ -19,7 +20,7 @@ def get_iterable_dom_tree(url: str) -> ElementTree:
 
 
 def map_xml_to_dict(
-    key_value_mappings: List[Dict[str, str]], dom_element: ElementTree
+        key_value_mappings: List[Dict[str, str]], dom_element: ElementTree
 ) -> Dict[str, str]:
     mapped_dict = {}
     for key_value_mapping in key_value_mappings:
@@ -56,7 +57,6 @@ def get_station_information(station_code: str, num_mins: int) -> List[Dict[str, 
     dom_tree = get_iterable_dom_tree(url)
     station_data = []
     for station_el in dom_tree:
-
         station = map_xml_to_dict(
             [
                 {"xml_tag": "Traincode", "dict_key": "train_code"},
@@ -82,9 +82,8 @@ def get_station_information(station_code: str, num_mins: int) -> List[Dict[str, 
             ],
             station_el,
         )
-        station["train_date"] = str(
-            datetime.strptime(station["train_date"], "%d %b %Y")
-        )
+        station["train_date"] = datetime.strptime(station["train_date"], "%d %b %Y")
+
         station_data.append(station)
     return station_data
 

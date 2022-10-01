@@ -2,24 +2,24 @@ from enum import Enum
 
 
 class StationType(Enum):
-    A = "A"
-    S = "S"
-    D = "D"
-    M = "M"
+    A = "A", "All"  # All stations
+    S = "S"  # Suburban stations
+    D = "D"  # Dublin stations
+    M = "M"  # Mainline stations
 
 
 class LocationTypeEnum(Enum):
-    O = "O"
-    T = "T"
-    S = "S"
-    D = "D"
+    O = "O"  # Origin
+    T = "T"  # Timing Point
+    S = "S"  # Stop
+    D = "D"  # Destination
 
 
 class StopTypeEnum(Enum):
-    C = "C"
-    N = "N"
+    C = "C"  # Current
+    N = "N"  # Next
 
 
 class TrainStatus(Enum):
-    N = "N"
-    R = "R"
+    N = "N"  # Not running yet
+    R = "R"  # Running
