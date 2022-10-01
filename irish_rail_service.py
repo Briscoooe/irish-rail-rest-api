@@ -18,41 +18,33 @@ def get_iterable_dom_tree(url: str) -> ElementTree:
     return fromstring(xml_string)
 
 
+def map_xml_to_dict(
+    key_value_mappings: List[Dict[str, str]], dom_element: ElementTree
+) -> Dict[str, str]:
+    mapped_dict = {}
+    for key_value_mapping in key_value_mappings:
+        for child in dom_element:
+            if child.tag == f"{XML_TAG_PREFIX}{key_value_mapping['xml_tag']}":
+                mapped_dict[key_value_mapping["dict_key"]] = child.text
+    return mapped_dict
+
+
 def get_stations(station_type: StationType) -> List[Dict[str, str]]:
     url = f"{API_BASE_URL}/getAllStationsXML_WithStationType?StationType={str(station_type.value)}"
     dom_tree = get_iterable_dom_tree(url)
     stations = []
     for station_el in dom_tree:
-
-        description = ""
-        alias = ""
-        latitute = ""
-        longitude = ""
-        code = ""
-        id = ""
-
-        for child in station_el:
-            if child.tag == f"{XML_TAG_PREFIX}StationDesc":
-                description = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}StationAlias":
-                alias = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}StationLatitude":
-                latitute = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}StationLongitude":
-                longitude = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}StationCode":
-                code = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}StationId":
-                id = child.text
-
-        station = {
-            "description": description,
-            "alias": alias,
-            "latitude": latitute,
-            "longitude": longitude,
-            "code": code,
-            "id": id,
-        }
+        station = map_xml_to_dict(
+            [
+                {"xml_tag": "StationDesc", "dict_key": "description"},
+                {"xml_tag": "StationAlias", "dict_key": "alias"},
+                {"xml_tag": "StationLatitude", "dict_key": "latitude"},
+                {"xml_tag": "StationLongitude", "dict_key": "longitude"},
+                {"xml_tag": "StationCode", "dict_key": "code"},
+                {"xml_tag": "StationId", "dict_key": "id"},
+            ],
+            station_el,
+        )
         stations.append(station)
     return stations
 
@@ -62,91 +54,33 @@ def get_station_information(station_code: str, num_mins: int) -> List[Dict[str, 
     dom_tree = get_iterable_dom_tree(url)
     station_data = []
     for station_el in dom_tree:
-        train_code = ""
-        station_full_name = ""
-        station_code = ""
-        query_time = ""
-        train_date = ""
-        origin = ""
-        destination = ""
-        origin_time = ""
-        destination_time = ""
-        status = ""
-        last_location = ""
-        due_in = ""
-        late = ""
-        exp_arrival = ""
-        exp_depart = ""
-        sch_arrival = ""
-        sch_depart = ""
-        direction = ""
-        train_type = ""
-        location_type = ""
 
-        for child in station_el:
-            if child.tag == f"{XML_TAG_PREFIX}Traincode":
-                train_code = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Stationfullname":
-                station_full_name = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Stationcode":
-                station_code = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Querytime":
-                query_time = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Traindate":
-                train_date = datetime.strptime(child.text, "%d %b %Y")
-            elif child.tag == f"{XML_TAG_PREFIX}Origin":
-                origin = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Destination":
-                destination = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Origintime":
-                origin_time = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Destinationtime":
-                destination_time = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Status":
-                status = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Lastlocation":
-                last_location = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Duein":
-                due_in = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Late":
-                late = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Exparrival":
-                exp_arrival = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Expdepart":
-                exp_depart = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Scharrival":
-                sch_arrival = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Schdepart":
-                sch_depart = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Direction":
-                direction = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Traintype":
-                train_type = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Locationtype":
-                location_type = child.text
-
-        station = {
-            "train_code": train_code,
-            "station_full_name": station_full_name,
-            "station_code": station_code,
-            "query_time": query_time,
-            "train_date": train_date,
-            "origin": origin,
-            "destination": destination,
-            "origin_time": origin_time,
-            "destination_time": destination_time,
-            "status": status,
-            "last_location": last_location,
-            "due_in": due_in,
-            "late": late,
-            "exp_arrival": exp_arrival,
-            "exp_depart": exp_depart,
-            "sch_arrival": sch_arrival,
-            "sch_depart": sch_depart,
-            "direction": direction,
-            "train_type": train_type,
-            "location_type": location_type,
-        }
+        station = map_xml_to_dict(
+            [
+                {"xml_tag": "Traincode", "dict_key": "train_code"},
+                {"xml_tag": "Stationfullname", "dict_key": "station_full_name"},
+                {"xml_tag": "Stationcode", "dict_key": "station_code"},
+                {"xml_tag": "Querytime", "dict_key": "query_time"},
+                {"xml_tag": "Traindate", "dict_key": "train_date"},
+                {"xml_tag": "Origin", "dict_key": "origin"},
+                {"xml_tag": "Destination", "dict_key": "destination"},
+                {"xml_tag": "Origintime", "dict_key": "origin_time"},
+                {"xml_tag": "Destinationtime", "dict_key": "destination_time"},
+                {"xml_tag": "Status", "dict_key": "status"},
+                {"xml_tag": "Lastlocation", "dict_key": "last_location"},
+                {"xml_tag": "Duein", "dict_key": "due_in"},
+                {"xml_tag": "Late", "dict_key": "late"},
+                {"xml_tag": "Exparrival", "dict_key": "exp_arrival"},
+                {"xml_tag": "Expdepart", "dict_key": "exp_depart"},
+                {"xml_tag": "Scharrival", "dict_key": "sch_arrival"},
+                {"xml_tag": "Schdepart", "dict_key": "sch_depart"},
+                {"xml_tag": "Direction", "dict_key": "direction"},
+                {"xml_tag": "Traintype", "dict_key": "train_type"},
+                {"xml_tag": "Locationtype", "dict_key": "location_type"},
+            ],
+            station_el,
+        )
+        station["train_date"] = datetime.strptime(station["train_date"], "%d %b %Y")
         station_data.append(station)
     return station_data
 
@@ -155,25 +89,15 @@ def filter_stations(text: str) -> List[Dict[str, str]]:
     url = f"{API_BASE_URL}/getStationsFilterXML?StationText={text}"
     dom_tree = get_iterable_dom_tree(url)
     stations = []
-
     for station_el in dom_tree:
-        description = ""
-        description_sp = ""
-        code = ""
-
-        for child in station_el:
-            if child.tag == f"{XML_TAG_PREFIX}StationDesc":
-                description = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}StationDesc_sp":
-                description_sp = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}StationCode":
-                code = child.text
-
-        station = {
-            "description": description,
-            "description_sp": description_sp,
-            "code": code,
-        }
+        station = map_xml_to_dict(
+            [
+                {"xml_tag": "StationDesc", "dict_key": "description"},
+                {"xml_tag": "StationDesc_sp", "dict_key": "description_sp"},
+                {"xml_tag": "StationCode", "dict_key": "code"},
+            ],
+            station_el,
+        )
         stations.append(station)
     return stations
 
@@ -183,39 +107,18 @@ def get_trains(station_type: StationType) -> List[Dict[str, str]]:
     dom_tree = get_iterable_dom_tree(url)
     trains = []
     for train_el in dom_tree:
-        status = ""
-        latitude = ""
-        longitude = ""
-        code = ""
-        date = ""
-        public_message = ""
-        direction = ""
-
-        for child in train_el:
-            if child.tag == f"{XML_TAG_PREFIX}TrainStatus":
-                status = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}TrainLatitude":
-                latitude = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}TrainLongitude":
-                longitude = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}TrainCode":
-                code = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}TrainDate":
-                date = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}PublicMessage":
-                public_message = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Direction":
-                direction = child.text
-
-        train = {
-            "status": status,
-            "latitude": latitude,
-            "longitude": longitude,
-            "code": code,
-            "date": date,
-            "public_message": public_message,
-            "direction": direction,
-        }
+        train = map_xml_to_dict(
+            [
+                {"xml_tag": "TrainCode", "dict_key": "train_code"},
+                {"xml_tag": "TrainDate", "dict_key": "train_date"},
+                {"xml_tag": "TrainStatus", "dict_key": "status"},
+                {"xml_tag": "TrainLatitude", "dict_key": "latitude"},
+                {"xml_tag": "TrainLongitude", "dict_key": "longitude"},
+                {"xml_tag": "PublicMessage", "dict_key": "public_message"},
+                {"xml_tag": "Direction", "dict_key": "direction"},
+            ],
+            train_el,
+        )
         trains.append(train)
     return trains
 
@@ -225,78 +128,27 @@ def get_train_movements(train_code: str, date: datetime) -> List[Dict[str, str]]
     dom_tree = get_iterable_dom_tree(url)
     movements = []
     for movement_el in dom_tree:
-        code = ""
-        date = ""
-        location_code = ""
-        location_full_name = ""
-        location_order = ""
-        location_type = ""
-        train_origin = ""
-        train_destination = ""
-        scheduled_arrival = ""
-        scheduled_departure = ""
-        expected_arrival = ""
-        expected_departure = ""
-        arrival = ""
-        departure = ""
-        auto_arrival = ""
-        auto_depart = ""
-        stop_type = ""
-
-        for child in movement_el:
-            if child.tag == f"{XML_TAG_PREFIX}TrainCode":
-                code = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}TrainDate":
-                date = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}LocationCode":
-                location_code = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}LocationFullName":
-                location_full_name = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}LocationOrder":
-                location_order = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}LocationType":
-                location_type = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}TrainOrigin":
-                train_origin = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}TrainDestination":
-                train_destination = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}ScheduledArrival":
-                scheduled_arrival = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}ScheduledDeparture":
-                scheduled_departure = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}ExpectedArrival":
-                expected_arrival = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}ExpectedDeparture":
-                expected_departure = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Arrival":
-                arrival = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}Departure":
-                departure = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}AutoArrival":
-                auto_arrival = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}AutoDepart":
-                auto_depart = child.text
-            elif child.tag == f"{XML_TAG_PREFIX}StopType":
-                stop_type = child.text
-
-        movement = {
-            "code": code,
-            "date": date,
-            "location_code": location_code,
-            "location_full_name": location_full_name,
-            "location_order": location_order,
-            "location_type": location_type,
-            "train_origin": train_origin,
-            "train_destination": train_destination,
-            "scheduled_arrival": scheduled_arrival,
-            "scheduled_departure": scheduled_departure,
-            "expected_arrival": expected_arrival,
-            "expected_departure": expected_departure,
-            "arrival": arrival,
-            "departure": departure,
-            "auto_arrival": auto_arrival,
-            "auto_depart": auto_depart,
-            "stop_type": stop_type,
-        }
+        movement = map_xml_to_dict(
+            [
+                {"xml_tag": "TrainCode", "dict_key": "train_code"},
+                {"xml_tag": "TrainDate", "dict_key": "train_date"},
+                {"xml_tag": "LocationCode", "dict_key": "location_code"},
+                {"xml_tag": "LocationFullName", "dict_key": "location_full_name"},
+                {"xml_tag": "LocationOrder", "dict_key": "location_order"},
+                {"xml_tag": "LocationType", "dict_key": "location_type"},
+                {"xml_tag": "TrainOrigin", "dict_key": "train_origin"},
+                {"xml_tag": "TrainDestination", "dict_key": "train_destination"},
+                {"xml_tag": "ScheduledArrival", "dict_key": "scheduled_arrival"},
+                {"xml_tag": "ScheduledDeparture", "dict_key": "scheduled_departure"},
+                {"xml_tag": "ExpectedArrival", "dict_key": "expected_arrival"},
+                {"xml_tag": "ExpectedDeparture", "dict_key": "expected_departure"},
+                {"xml_tag": "Arrival", "dict_key": "arrival"},
+                {"xml_tag": "Departure", "dict_key": "departure"},
+                {"xml_tag": "AutoArrival", "dict_key": "auto_arrival"},
+                {"xml_tag": "AutoDepart", "dict_key": "auto_depart"},
+                {"xml_tag": "StopType", "dict_key": "stop_type"},
+            ],
+            movement_el,
+        )
         movements.append(movement)
     return movements
