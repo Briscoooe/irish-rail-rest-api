@@ -1,6 +1,5 @@
 from apiflask import APIFlask
-from apiflask.fields import Integer, String
-from marshmallow.fields import Date, Enum
+from marshmallow.fields import Date, Enum, Integer, String
 from marshmallow.validate import Range
 
 import irish_rail_service
