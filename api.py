@@ -5,8 +5,13 @@ from marshmallow.validate import Range
 
 import irish_rail_service
 from enums import StationType
-from schemas import (Station, StationFilterResult, StationInformation, Train,
-                     TrainMovement)
+from schemas import (
+    Station,
+    StationFilterResult,
+    StationInformation,
+    Train,
+    TrainMovement,
+)
 
 app = APIFlask(__name__, title="Irish Rail JSON API (Unofficial)", version="1.0.0")
 

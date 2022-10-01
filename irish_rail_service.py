@@ -25,7 +25,9 @@ def map_xml_to_dict(
     for key_value_mapping in key_value_mappings:
         for child in dom_element:
             if child.tag == f"{XML_TAG_PREFIX}{key_value_mapping['xml_tag']}":
-                mapped_dict[key_value_mapping["dict_key"]] = child.text
+                mapped_dict[key_value_mapping["dict_key"]] = (
+                    child.text.strip() if child.text else None
+                )
     return mapped_dict
 
 
@@ -109,8 +111,8 @@ def get_trains(station_type: StationType) -> List[Dict[str, str]]:
     for train_el in dom_tree:
         train = map_xml_to_dict(
             [
-                {"xml_tag": "TrainCode", "dict_key": "train_code"},
-                {"xml_tag": "TrainDate", "dict_key": "train_date"},
+                {"xml_tag": "TrainCode", "dict_key": "code"},
+                {"xml_tag": "TrainDate", "dict_key": "date"},
                 {"xml_tag": "TrainStatus", "dict_key": "status"},
                 {"xml_tag": "TrainLatitude", "dict_key": "latitude"},
                 {"xml_tag": "TrainLongitude", "dict_key": "longitude"},
@@ -130,8 +132,8 @@ def get_train_movements(train_code: str, date: datetime) -> List[Dict[str, str]]
     for movement_el in dom_tree:
         movement = map_xml_to_dict(
             [
-                {"xml_tag": "TrainCode", "dict_key": "train_code"},
-                {"xml_tag": "TrainDate", "dict_key": "train_date"},
+                {"xml_tag": "TrainCode", "dict_key": "code"},
+                {"xml_tag": "TrainDate", "dict_key": "date"},
                 {"xml_tag": "LocationCode", "dict_key": "location_code"},
                 {"xml_tag": "LocationFullName", "dict_key": "location_full_name"},
                 {"xml_tag": "LocationOrder", "dict_key": "location_order"},
