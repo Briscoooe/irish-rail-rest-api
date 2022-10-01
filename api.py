@@ -1,10 +1,10 @@
-from apiflask import APIFlask, Schema
+from apiflask import APIFlask
 from apiflask.fields import Integer, String
 from marshmallow.fields import Date, Enum
 from marshmallow.validate import Range
 
 import irish_rail_service
-from enums import StationType, TrainStatus
+from enums import StationType
 from schemas import (Station, StationFilterResult, StationInformation, Train,
                      TrainMovement)
 
