@@ -5,7 +5,6 @@ import requests
 from defusedxml.ElementTree import fromstring
 from requests import Response
 
-from api import TrainStatus
 from enums import StationType
 
 API_BASE_URL = "http://api.irishrail.ie/realtime/realtime.asmx"
