@@ -14,7 +14,7 @@ app = APIFlask(__name__, title="Irish Rail JSON API (Unofficial)", version="1.0.
 @app.get("/stations")
 @app.input(
     {
-        "type": Enum(required=False, enum=StationType, default=StationType.A),
+        "station_type": Enum(required=False, enum=StationType, default=StationType.A),
     },
     location="query",
 )
@@ -22,8 +22,8 @@ app = APIFlask(__name__, title="Irish Rail JSON API (Unofficial)", version="1.0.
 @app.doc(operation_id="get_stations")
 def get_stations(query):
     if not query:
-        query = {"type": StationType.A}
-    return irish_rail_service.get_stations(query["type"])
+        query = {"station_type": StationType.A}
+    return irish_rail_service.get_stations(query["station_type"])
 
 
 @app.get("/stations/<station_code>/")
@@ -59,7 +59,7 @@ def filter_stations(query):
 @app.get("/trains")
 @app.input(
     {
-        "type": Enum(required=False, enum=StationType, default=StationType.A),
+        "station_type": Enum(required=False, enum=StationType, default=StationType.A),
     },
     location="query",
 )
@@ -67,8 +67,8 @@ def filter_stations(query):
 @app.doc(operation_id="get_trains")
 def get_trains(query):
     if not query:
-        query = {"type": StationType.A}
-    return irish_rail_service.get_trains(query["type"])
+        query = {"station_type": StationType.A}
+    return irish_rail_service.get_trains(query["station_type"])
 
 
 @app.get("/trains/<train_code>/movements")
