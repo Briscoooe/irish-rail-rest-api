@@ -1,18 +1,14 @@
 from apiflask import APIFlask, Schema
 from apiflask.fields import Integer, String
 from marshmallow.fields import Date, Enum
+from marshmallow.validate import Range
 
 import irish_rail_service
 from enums import StationType, TrainStatus
-from schemas import (
-    Station,
-    StationFilterResult,
-    StationInformation,
-    Train,
-    TrainMovement,
-)
+from schemas import (Station, StationFilterResult, StationInformation, Train,
+                     TrainMovement)
 
-app = APIFlask(__name__)
+app = APIFlask(__name__, title="Irish Rail JSON API (Unofficial)", version="1.0.0")
 
 
 @app.get("/stations")
@@ -23,6 +19,7 @@ app = APIFlask(__name__)
     location="query",
 )
 @app.output(Station(many=True))
+@app.doc(operation_id="get_stations")
 def get_stations(query):
     if not query:
         query = {"type": StationType.A}
@@ -32,11 +29,14 @@ def get_stations(query):
 @app.get("/stations/<station_code>/")
 @app.input(
     {
-        "num_mins": Integer(required=False, default=90),
+        "num_mins": Integer(
+            required=False, default=90, validate=[Range(min=5, max=90)]
+        ),
     },
     location="query",
 )
 @app.output(StationInformation(many=True))
+@app.doc(operation_id="get_station_information")
 def get_station_information(station_code, query):
     if not query:
         query = {"num_mins": 90}
@@ -51,6 +51,7 @@ def get_station_information(station_code, query):
     location="query",
 )
 @app.output(StationFilterResult(many=True))
+@app.doc(operation_id="filter_stations")
 def filter_stations(query):
     return irish_rail_service.filter_stations(query["text"])
 
@@ -63,6 +64,7 @@ def filter_stations(query):
     location="query",
 )
 @app.output(Train(many=True))
+@app.doc(operation_id="get_trains")
 def get_trains(query):
     if not query:
         query = {"type": StationType.A}
@@ -77,6 +79,11 @@ def get_trains(query):
     location="query",
 )
 @app.output(TrainMovement(many=True))
+@app.doc(operation_id="get_train_movements")
+@app.doc(
+    summary="Get train movements",
+    description="Returns all stop information for the given train as follows",
+)
 def get_train_movements(train_code, query):
     return irish_rail_service.get_train_movements(train_code, query["date"])
 

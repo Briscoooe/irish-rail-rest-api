@@ -18,8 +18,8 @@ def get_iterable_dom_tree(url: str) -> ElementTree:
     return fromstring(xml_string)
 
 
-def get_stations(type: StationType) -> List[Dict[str, str]]:
-    url = f"{API_BASE_URL}/getAllStationsXML_WithStationType?StationType={str(type.value)}"
+def get_stations(station_type: StationType) -> List[Dict[str, str]]:
+    url = f"{API_BASE_URL}/getAllStationsXML_WithStationType?StationType={str(station_type.value)}"
     dom_tree = get_iterable_dom_tree(url)
     stations = []
     for station_el in dom_tree:
@@ -178,10 +178,8 @@ def filter_stations(text: str) -> List[Dict[str, str]]:
     return stations
 
 
-def get_trains(type: StationType) -> List[Dict[str, str]]:
-    url = (
-        f"{API_BASE_URL}/getCurrentTrainsXML_WithTrainType?TrainType={str(type.value)}"
-    )
+def get_trains(station_type: StationType) -> List[Dict[str, str]]:
+    url = f"{API_BASE_URL}/getCurrentTrainsXML_WithTrainType?TrainType={str(station_type.value)}"
     dom_tree = get_iterable_dom_tree(url)
     trains = []
     for train_el in dom_tree:
