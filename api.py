@@ -1,3 +1,5 @@
+import datetime
+
 from apiflask import APIFlask
 from marshmallow.fields import Date, Enum, Integer, String
 from marshmallow.validate import Range, OneOf
@@ -82,7 +84,7 @@ def get_trains(query):
 @app.get("/trains/<train_code>/movements")
 @app.input(
     {
-        "date": Date(required=True),
+        "date": Date(required=False),
     },
     location="query",
 )
@@ -93,6 +95,8 @@ def get_trains(query):
     description="Returns all stop information for the given train as follows",
 )
 def get_train_movements(train_code, query):
+    if not query:
+        query = {"date": datetime.date.today()}
     return irish_rail_service.get_train_movements(train_code, query["date"])
 
 

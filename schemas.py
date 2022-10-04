@@ -38,13 +38,13 @@ class StationInformation(Schema):
 
 
 class Train(Schema):
-    status = String()
+    status = String(metadata={'description': 'N for not yet running or R for running'})
     latitude = Float()
     longitude = Float()
     code = String()
     date = String()
-    public_message = String()
-    direction = String()
+    public_message = String(metadata={'description': 'Public Message is the latest information on the train uses'})
+    direction = String(metadata={'description': 'Direction is either Northbound or Southbound for trains between Dundalk and Rosslare and between Sligo and Dublin.  for all other trains the direction is to the destination eg. To Limerick'})
 
 
 class TrainMovement(Schema):
