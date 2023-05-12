@@ -1,0 +1,1 @@
+An unofficial JSON API for the [Irish Rail Realtime API](http://api.irishrail.ie/realtime/). The current one returns XML across a series of unrelated endpoints. To make it more usable I made this wrapper so it's easier to understand and it returns in a more standard and predictable format.

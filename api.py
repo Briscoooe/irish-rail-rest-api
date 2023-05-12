@@ -1,8 +1,8 @@
 import datetime
 
 from apiflask import APIFlask
-from marshmallow.fields import Date, Enum, Integer, String
-from marshmallow.validate import Range, OneOf
+from marshmallow.fields import Date, Enum, Integer, String, DateTime
+from marshmallow.validate import Range
 
 import irish_rail_service
 from enums import StationType
@@ -29,7 +29,7 @@ app = APIFlask(__name__, title="Irish Rail JSON API (Unofficial)", version="1.0.
 def get_stations(query):
     if not query:
         query = {"station_type": StationType.A}
-    return irish_rail_service.get_stations(query["station_type"])
+    return irish_rail_service.get_stations(station_type=query["station_type"])
 
 
 @app.get("/stations/<station_code>/")
@@ -46,7 +46,7 @@ def get_stations(query):
 def get_station_information(station_code, query):
     if not query:
         query = {"num_mins": 90}
-    return irish_rail_service.get_station_information(station_code, query)
+    return irish_rail_service.get_station_information(station_code=station_code, num_mins=query)
 
 
 @app.get("/stations/filter")
@@ -59,7 +59,7 @@ def get_station_information(station_code, query):
 @app.output(StationFilterResult(many=True))
 @app.doc(operation_id="filter_stations")
 def filter_stations(query):
-    return irish_rail_service.filter_stations(query["text"])
+    return irish_rail_service.filter_stations(text=query["text"])
 
 
 @app.get("/trains")
@@ -78,13 +78,13 @@ def filter_stations(query):
 def get_trains(query):
     if not query:
         query = {"station_type": StationType.A}
-    return irish_rail_service.get_trains(query["station_type"])
+    return irish_rail_service.get_trains(station_type=query["station_type"])
 
 
 @app.get("/trains/<train_code>/movements")
 @app.input(
     {
-        "date": Date(required=False),
+        "date": DateTime(required=False),
     },
     location="query",
 )
@@ -94,10 +94,10 @@ def get_trains(query):
     summary="Get train movements",
     description="Returns all stop information for the given train as follows",
 )
-def get_train_movements(train_code, query):
+def get_train_movements(train_code: str, query):
     if not query:
         query = {"date": datetime.date.today()}
-    return irish_rail_service.get_train_movements(train_code, query["date"])
+    return irish_rail_service.get_train_movements(train_code=train_code, date=query["date"])
 
 
 if __name__ == "__main__":
