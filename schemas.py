@@ -29,7 +29,9 @@ class StationInformation(Schema):
     station_code = String(
         metadata={"description": "4 to 5 letter station abbreviation"}
     )
-    query_time = Time(metadata={"description": "Time the query was made. Format `HH:MM:SS`"})
+    query_time = Time(
+        metadata={"description": "Time the query was made. Format `HH:MM:SS`"}
+    )
     train_date = Date(
         metadata={
             "description": "The date the service started its journey (some trains run over midnight).\nDate in `YYYY-MM-DD` format",
@@ -38,10 +40,14 @@ class StationInformation(Schema):
     origin = String()
     destination = String()
     origin_time = Time(
-        metadata={"description": "The time the train left (or will leave) its origin. Format `HH:MM`"}
+        metadata={
+            "description": "The time the train left (or will leave) its origin. Format `HH:MM`"
+        }
     )
     destination_time = Time(
-        metadata={"description": "The scheduled time at its destination. Format `HH:MM`"}
+        metadata={
+            "description": "The scheduled time at its destination. Format `HH:MM`"
+        }
     )
     status = String(metadata={"description": "Latest information on this service"})
     last_location = String(metadata={"description": "(Arrived|Departed $station_name)"})

@@ -1,5 +1,5 @@
 from datetime import datetime, time
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import requests
 from defusedxml import ElementTree
@@ -21,8 +21,10 @@ def get_iterable_dom_tree(url: str) -> ElementTree:
 def convert_date_format(date_str: str) -> datetime:
     return datetime.strptime(date_str, "%d %b %Y")
 
+
 def parse_time(time_str: str) -> time:
     return datetime.strptime(time_str, "%H:%M").time()
+
 
 def map_xml_to_dict(
     key_value_mappings: List[Dict[str, str]], dom_element: ElementTree
@@ -57,7 +59,9 @@ def get_stations(station_type: StationType) -> List[Dict[str, str]]:
     return stations
 
 
-def get_station_information(station_code: str, num_mins: int) -> List[Dict[str, str]]:
+def get_station_information(
+    station_code: str, num_mins: int
+) -> List[Dict[str, Union[str, datetime, time]]]:
     url = f"{API_BASE_URL}/getStationDataByCodeXML_WithNumMins?StationCode={station_code}&NumMins={num_mins}"
     dom_tree = get_iterable_dom_tree(url)
     station_data = []
@@ -87,7 +91,9 @@ def get_station_information(station_code: str, num_mins: int) -> List[Dict[str, 
             ],
             station_el,
         )
-        station["query_time"] = datetime.strptime(station["query_time"], "%H:%M:%S").time()
+        station["query_time"] = datetime.strptime(
+            station["query_time"], "%H:%M:%S"
+        ).time()
         station["train_date"] = convert_date_format(station["train_date"])
         station["origin_time"] = parse_time(station["origin_time"])
         station["destination_time"] = parse_time(station["destination_time"])
@@ -116,7 +122,7 @@ def filter_stations(text: str) -> List[Dict[str, str]]:
     return stations
 
 
-def get_trains(station_type: StationType) -> List[Dict[str, str]]:
+def get_trains(station_type: StationType) -> List[Dict[str, Union[str, datetime]]]:
     url = f"{API_BASE_URL}/getCurrentTrainsXML_WithTrainType?TrainType={str(station_type)}"
     dom_tree = get_iterable_dom_tree(url)
     trains = []
