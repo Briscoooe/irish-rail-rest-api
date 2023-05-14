@@ -22,7 +22,7 @@ app = APIFlask(
     docs_ui="redoc",
 )
 app.config["DESCRIPTION"] = """
-A REST API wrapper around the SOAP API provided by Irish Rail. All documentation for the underlying SOAP API can be found [here](http://api.irishrail.ie/realtime/).
+A REST API wrapper around the SOAP API provided by Irish Rail. All documentation for the underlying SOAP API can be found [here](http://api.irishrail.ie/realtime/). Some property descriptions are missing as they are not provided by the orginal API. 
 
 View on [GitHub](https://github.com/Briscoooe/irish-rail-rest-api)
 """
