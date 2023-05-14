@@ -21,12 +21,19 @@ app = APIFlask(
     version="1.0.0",
     docs_ui="redoc",
 )
-app.config["DESCRIPTION"] = """
+app.config[
+    "DESCRIPTION"
+] = """
 A REST API wrapper around the SOAP API provided by Irish Rail. All documentation for the underlying SOAP API can be found [here](http://api.irishrail.ie/realtime/). Some property descriptions are missing as they are not provided by the orginal API. 
 
 View on [GitHub](https://github.com/Briscoooe/irish-rail-rest-api)
 """
 
+app.config["EXTERNAL_DOCs"] = {
+    "Irish Rail API": "http://api.irishrail.ie/realtime/",
+    "GitHub": "aa"
+}
+app.config['REDOC_CONFIG'] = {'expandResponses': '200'}
 
 @app.get("/stations")
 @app.input(
@@ -136,4 +143,3 @@ def get_train_movements(train_code: str, query):
     return irish_rail_service.get_train_movements(
         train_code=train_code, date=query["date"]
     )
-
