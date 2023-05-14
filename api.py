@@ -31,9 +31,10 @@ View on [GitHub](https://github.com/Briscoooe/irish-rail-rest-api)
 
 app.config["EXTERNAL_DOCs"] = {
     "Irish Rail API": "http://api.irishrail.ie/realtime/",
-    "GitHub": "aa"
+    "GitHub": "aa",
 }
-app.config['REDOC_CONFIG'] = {'expandResponses': '200'}
+app.config["REDOC_CONFIG"] = {"expandResponses": "200"}
+
 
 @app.get("/stations")
 @app.input(
