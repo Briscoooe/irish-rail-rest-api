@@ -3,7 +3,7 @@ from apiflask.fields import Integer, String
 from marshmallow.fields import Boolean, Date, Float
 from marshmallow.validate import OneOf
 
-from enums import StopType, TrainStatus, LocationType
+from enums import StopType, TrainStatus, LocationType, StationType
 
 
 class Station(Schema):
@@ -133,3 +133,15 @@ class StationFilterResult(Schema):
     description = String()
     description_sp = String()
     code = String()
+
+
+class StationTypeIn(Schema):
+    station_type = String(
+        required=False,
+        default=StationType.A,
+        validate=[OneOf(StationType.list())],
+        metadata={
+            "description": "A for All, M for Mainline, S for suburban and D for DART",
+            "default": "A",
+        },
+    )

@@ -1,8 +1,8 @@
 import datetime
 
-from apiflask import APIFlask, Schema
+from apiflask import APIFlask
 from marshmallow.fields import Integer, String, DateTime
-from marshmallow.validate import Range, OneOf
+from marshmallow.validate import Range
 
 import irish_rail_service
 from enums import StationType
@@ -12,23 +12,12 @@ from schemas import (
     StationInformation,
     Train,
     TrainMovement,
+    StationTypeIn,
 )
 
 app = APIFlask(
     __name__, title="Irish Rail REST API (Unofficial)", version="1.0.0", docs_ui="redoc"
 )
-
-
-class StationTypeIn(Schema):
-    station_type = String(
-        required=False,
-        default=StationType.A,
-        validate=[OneOf(StationType.list())],
-        metadata={
-            "description": "A for All, M for Mainline, S for suburban and D for DART",
-            "default": "A",
-        },
-    )
 
 
 @app.get("/stations")
@@ -37,7 +26,11 @@ class StationTypeIn(Schema):
     location="query",
 )
 @app.output(Station(many=True))
-@app.doc(operation_id="get_stations", description="Returns a list of stations.")
+@app.doc(
+    operation_id="get_stations",
+    description="Returns a list of stations.",
+    tags=["stations"],
+)
 def get_stations(query):
     if not query:
         query = {"station_type": StationType.A}
@@ -55,6 +48,7 @@ def get_stations(query):
 @app.doc(
     operation_id="filter_stations",
     description="Returns a list of stations that match the given text.",
+    tags=["stations"],
 )
 def filter_stations(query):
     return irish_rail_service.filter_stations(text=query["text"])
@@ -76,6 +70,7 @@ def filter_stations(query):
 @app.doc(
     operation_id="get_station_information",
     description="Returns all trains due to serve the named station in the next `num_mins` minutes.",
+    tags=["stations"],
 )
 def get_station_information(station_code, query):
     if not query:
@@ -94,6 +89,7 @@ def get_station_information(station_code, query):
 @app.doc(
     operation_id="get_trains",
     description="Returns a list of of 'running trains' i.e. trains that are between origin and destination or are due to start within 10 minutes of the query time",
+    tags=["trains"],
 )
 def get_trains(query):
     if not query:
@@ -113,6 +109,7 @@ def get_trains(query):
 @app.doc(
     summary="Get train movements",
     description="Returns all stop information for the given train.",
+    tags=["trains"],
 )
 def get_train_movements(train_code: str, query):
     if not query:
