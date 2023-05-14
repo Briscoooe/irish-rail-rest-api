@@ -14,7 +14,7 @@ from schemas import (
     TrainMovement,
 )
 
-app = APIFlask(__name__, title="Irish Rail JSON API (Unofficial)", version="1.0.0")
+app = APIFlask(__name__, title="Irish Rail REST API (Unofficial)", version="1.0.0")
 
 
 @app.get("/stations")
