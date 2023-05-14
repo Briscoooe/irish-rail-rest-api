@@ -76,12 +76,16 @@ class StationInformation(Schema):
         metadata={"description": "DART, Commuter, Intercity, Enterprise or None"}
     )
     location_type = String(
-        metadata={"description": "O for Origin, D for Destination or S for Stop"},validate=[OneOf(LocationType.list())]
+        metadata={"description": "O for Origin, D for Destination or S for Stop"},
+        validate=[OneOf(LocationType.list())],
     )
 
 
 class Train(Schema):
-    status = String(validate=[OneOf(TrainStatus.list())], metadata={"description": "N for not yet running or R for running"})
+    status = String(
+        validate=[OneOf(TrainStatus.list())],
+        metadata={"description": "N for not yet running or R for running"},
+    )
     latitude = Float()
     longitude = Float()
     code = String(
@@ -91,9 +95,7 @@ class Train(Schema):
     )
     date = String()
     public_message = String(
-        metadata={
-            "description": "The latest information on the train uses"
-        }
+        metadata={"description": "The latest information on the train uses"}
     )
     direction = String(
         metadata={
@@ -120,7 +122,11 @@ class TrainMovement(Schema):
         metadata={"description": "Was information automatically generated"}
     )
     auto_depart = Boolean()
-    stop_type = String(metadata={"description": "C for Current, N for Next"}, default=StopType.C, validate=[OneOf(StopType.list())])
+    stop_type = String(
+        metadata={"description": "C for Current, N for Next"},
+        default=StopType.C,
+        validate=[OneOf(StopType.list())],
+    )
 
 
 class StationFilterResult(Schema):
