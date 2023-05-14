@@ -1,5 +1,5 @@
 from apiflask import Schema
-from apiflask.fields import Integer, String
+from apiflask.fields import Integer, String, Time
 from marshmallow.fields import Boolean, Date, Float
 from marshmallow.validate import OneOf
 
@@ -29,19 +29,19 @@ class StationInformation(Schema):
     station_code = String(
         metadata={"description": "4 to 5 letter station abbreviation"}
     )
-    query_time = String(metadata={"description": "Time the query was made"})
+    query_time = Time(metadata={"description": "Time the query was made. Format `HH:MM:SS`"})
     train_date = Date(
         metadata={
-            "description": "The date the service started its journey (some trains run over midnight)"
-        }
+            "description": "The date the service started its journey (some trains run over midnight).\nDate in `YYYY-MM-DD` format",
+        },
     )
     origin = String()
     destination = String()
-    origin_time = String(
-        metadata={"description": "The time the train left (or will leave) its origin"}
+    origin_time = Time(
+        metadata={"description": "The time the train left (or will leave) its origin. Format `HH:MM`"}
     )
-    destination_time = String(
-        metadata={"description": "The scheduled time at its destination"}
+    destination_time = Time(
+        metadata={"description": "The scheduled time at its destination. Format `HH:MM`"}
     )
     status = String(metadata={"description": "Latest information on this service"})
     last_location = String(metadata={"description": "(Arrived|Departed $station_name)"})
@@ -51,22 +51,22 @@ class StationInformation(Schema):
     late = Integer(metadata={"description": "Num of minutes the train is late"})
     exp_arrival = String(
         metadata={
-            "description": "The trains expected arrival time at the query station updated as the train progresses (note will show 00:00 for trains starting from query station"
+            "description": "The trains expected arrival time at the query station updated as the train progresses (note will show 00:00 for trains starting from query station. Format `HH:MM`"
         }
     )
     exp_depart = String(
         metadata={
-            "description": "The trains expected departure time at the query station updated as the train progresses (note will show 00:00 for trains terminating at query station)"
+            "description": "The trains expected departure time at the query station updated as the train progresses (note will show 00:00 for trains terminating at query station). Format `HH:MM`"
         }
     )
     sch_arrival = String(
         metadata={
-            "description": "The trains scheduled arrival time at the query station (note will show 00:00 for trains starting from query station)"
+            "description": "The trains scheduled arrival time at the query station (note will show 00:00 for trains starting from query station). Format `HH:MM`"
         }
     )
     sch_depart = String(
         metadata={
-            "description": "The trains scheduled departure time at the query station (note will show 00:00 for trains terminating at query station)"
+            "description": "The trains scheduled departure time at the query station (note will show 00:00 for trains terminating at query station). Format `HH:MM`"
         }
     )
     direction = String(
