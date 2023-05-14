@@ -137,6 +137,3 @@ def get_train_movements(train_code: str, query):
         train_code=train_code, date=query["date"]
     )
 
-
-if __name__ == "__main__":
-    app.run(debug=True, port=5001)
