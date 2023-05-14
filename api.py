@@ -1,8 +1,8 @@
 import datetime
 
 from apiflask import APIFlask
-from marshmallow.fields import Date, Enum, Integer, String, DateTime
-from marshmallow.validate import Range
+from marshmallow.fields import List, Integer, String, DateTime
+from marshmallow.validate import Range, OneOf
 
 import irish_rail_service
 from enums import StationType
@@ -20,7 +20,7 @@ app = APIFlask(__name__, title="Irish Rail REST API (Unofficial)", version="1.0.
 @app.get("/stations")
 @app.input(
     {
-        "station_type": Enum(required=False, enum=StationType, default=StationType.A),
+        "station_type": String(required=False, default=StationType.A, validate=[OneOf(StationType.list())]),
     },
     location="query",
 )
@@ -62,17 +62,17 @@ def filter_stations(query):
     return irish_rail_service.filter_stations(text=query["text"])
 
 
-@app.get("/trains")
-@app.input(
-    {
-        "station_type": Enum(
-            required=False,
-            enum=StationType,
-            default=StationType.A,
-        ),
-    },
-    location="query",
-)
+# @app.get("/trains")
+# @app.input(
+#     {
+#         "station_type": Enum(
+#             required=False,
+#             enum=StationType,
+#             default=StationType.A,
+#         ),
+#     },
+#     location="query",
+# )
 @app.output(Train(many=True))
 @app.doc(operation_id="get_trains")
 def get_trains(query):
