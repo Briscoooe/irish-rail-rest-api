@@ -5,7 +5,7 @@ description = ""
 authors = ["Briscoooe <brianbriscoe06@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.11"
 requests = "^2.28.1"
 defusedxml = "^0.7.1"
 APIFlask = "^1.1.3"
