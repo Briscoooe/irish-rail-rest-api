@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from datetime import datetime
 from typing import Dict, List
 
@@ -18,8 +17,9 @@ def get_iterable_dom_tree(url: str) -> ElementTree:
     xml_string = response.text
     return fromstring(xml_string)
 
+
 def map_xml_to_dict(
-        key_value_mappings: List[Dict[str, str]], dom_element: ElementTree
+    key_value_mappings: List[Dict[str, str]], dom_element: ElementTree
 ) -> Dict[str, str]:
     mapped_dict = {}
     for key_value_mapping in key_value_mappings:

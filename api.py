@@ -1,7 +1,7 @@
 import datetime
 
 from apiflask import APIFlask, Schema
-from marshmallow.fields import List, Integer, String, DateTime, Enum
+from marshmallow.fields import Integer, String, DateTime
 from marshmallow.validate import Range, OneOf
 
 import irish_rail_service
@@ -14,10 +14,22 @@ from schemas import (
     TrainMovement,
 )
 
-app = APIFlask(__name__, title="Irish Rail REST API (Unofficial)", version="1.0.0", docs_ui='redoc')
+app = APIFlask(
+    __name__, title="Irish Rail REST API (Unofficial)", version="1.0.0", docs_ui="redoc"
+)
+
 
 class StationTypeIn(Schema):
-    station_type = String(required=False, default=StationType.A, validate=[OneOf(StationType.list())], metadata={'description': 'A for All, M for Mainline, S for suburban and D for DART', 'default': 'A'})
+    station_type = String(
+        required=False,
+        default=StationType.A,
+        validate=[OneOf(StationType.list())],
+        metadata={
+            "description": "A for All, M for Mainline, S for suburban and D for DART",
+            "default": "A",
+        },
+    )
+
 
 @app.get("/stations")
 @app.input(
@@ -32,7 +44,6 @@ def get_stations(query):
     return irish_rail_service.get_stations(station_type=query["station_type"])
 
 
-
 @app.get("/stations/filter")
 @app.input(
     schema={
@@ -41,25 +52,37 @@ def get_stations(query):
     location="query",
 )
 @app.output(StationFilterResult(many=True))
-@app.doc(operation_id="filter_stations", description="Returns a list of stations that match the given text.")
+@app.doc(
+    operation_id="filter_stations",
+    description="Returns a list of stations that match the given text.",
+)
 def filter_stations(query):
     return irish_rail_service.filter_stations(text=query["text"])
+
 
 @app.get("/stations/<station_code>/")
 @app.input(
     schema={
         "num_mins": Integer(
-            required=False, default=90, validate=[Range(min=5, max=90)], metadata={'default': 90}
+            required=False,
+            default=90,
+            validate=[Range(min=5, max=90)],
+            metadata={"default": 90},
         ),
     },
     location="query",
 )
 @app.output(StationInformation(many=True))
-@app.doc(operation_id="get_station_information", description="Returns all trains due to serve the named station in the next `num_mins` minutes.")
+@app.doc(
+    operation_id="get_station_information",
+    description="Returns all trains due to serve the named station in the next `num_mins` minutes.",
+)
 def get_station_information(station_code, query):
     if not query:
         query = {"num_mins": 90}
-    return irish_rail_service.get_station_information(station_code=station_code, num_mins=query)
+    return irish_rail_service.get_station_information(
+        station_code=station_code, num_mins=query
+    )
 
 
 @app.get("/trains")
@@ -68,7 +91,10 @@ def get_station_information(station_code, query):
     location="query",
 )
 @app.output(Train(many=True))
-@app.doc(operation_id="get_trains", description="Returns a list of of 'running trains' i.e. trains that are between origin and destination or are due to start within 10 minutes of the query time")
+@app.doc(
+    operation_id="get_trains",
+    description="Returns a list of of 'running trains' i.e. trains that are between origin and destination or are due to start within 10 minutes of the query time",
+)
 def get_trains(query):
     if not query:
         query = {"station_type": StationType.A}
@@ -91,7 +117,9 @@ def get_trains(query):
 def get_train_movements(train_code: str, query):
     if not query:
         query = {"date": datetime.date.today()}
-    return irish_rail_service.get_train_movements(train_code=train_code, date=query["date"])
+    return irish_rail_service.get_train_movements(
+        train_code=train_code, date=query["date"]
+    )
 
 
 if __name__ == "__main__":

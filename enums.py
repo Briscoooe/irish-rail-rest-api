@@ -1,15 +1,17 @@
 from enum import Enum
 
+
 class ExtendedEnum(Enum):
     @classmethod
     def list(cls):
         return list(map(lambda c: c.value, cls))
 
+
 class StationType(ExtendedEnum):
-    A = "A" # All
-    S = "S" # Stops
-    D = "D" # DART
-    M = "M" # Mainline
+    A = "A"  # All
+    S = "S"  # Stops
+    D = "D"  # DART
+    M = "M"  # Mainline
 
 
 class LocationTypeEnum(Enum):
