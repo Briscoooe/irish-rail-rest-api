@@ -21,11 +21,11 @@ app = APIFlask(
     version="1.0.0",
     docs_ui="redoc",
 )
-app.config["DESCRIPTION"] = "Irish Rail REST API (Unofficial)"
-app.config[
-    "TERMS_OF_SERVICE"
-] = "https://www.irishrail.ie/en-ie/about-us/privacy-policy"
-app.config["CONTACT"] = "aa"
+app.config["DESCRIPTION"] = """
+A REST API wrapper around the SOAP API provided by Irish Rail. All documentation for the underlying SOAP API can be found [here](http://api.irishrail.ie/realtime/).
+
+View on [GitHub](https://github.com/Briscoooe/irish-rail-rest-api)
+"""
 
 
 @app.get("/stations")
