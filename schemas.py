@@ -1,6 +1,9 @@
 from apiflask import Schema
 from apiflask.fields import Integer, String
 from marshmallow.fields import Boolean, Date, Float
+from marshmallow.validate import OneOf
+
+from enums import StopType, TrainStatus, LocationType
 
 
 class Station(Schema):
@@ -29,7 +32,7 @@ class StationInformation(Schema):
     query_time = String(metadata={"description": "Time the query was made"})
     train_date = Date(
         metadata={
-            "description": "The date the service started its journey ( some trains run over midnight)"
+            "description": "The date the service started its journey (some trains run over midnight)"
         }
     )
     origin = String()
@@ -48,22 +51,22 @@ class StationInformation(Schema):
     late = Integer(metadata={"description": "Num of minutes the train is late"})
     exp_arrival = String(
         metadata={
-            "description": "The trains expected arrival time at the query station updated as the train progresses ( note will show 00:00 for trains starting from query station"
+            "description": "The trains expected arrival time at the query station updated as the train progresses (note will show 00:00 for trains starting from query station"
         }
     )
     exp_depart = String(
         metadata={
-            "description": "The trains expected departure time at the query station updated as the train progresses ( note will show 00:00 for trains terminating at query station)"
+            "description": "The trains expected departure time at the query station updated as the train progresses (note will show 00:00 for trains terminating at query station)"
         }
     )
     sch_arrival = String(
         metadata={
-            "description": "The trains scheduled arrival time at the query station ( note will show 00:00 for trains starting from query station)"
+            "description": "The trains scheduled arrival time at the query station (note will show 00:00 for trains starting from query station)"
         }
     )
     sch_depart = String(
         metadata={
-            "description": "The trains scheduled departure time at the query station ( note will show 00:00 for trains terminating at query station)"
+            "description": "The trains scheduled departure time at the query station (note will show 00:00 for trains terminating at query station)"
         }
     )
     direction = String(
@@ -73,12 +76,12 @@ class StationInformation(Schema):
         metadata={"description": "DART, Commuter, Intercity, Enterprise or None"}
     )
     location_type = String(
-        metadata={"description": "O for Origin, D for Destination or S for Stop"}
+        metadata={"description": "O for Origin, D for Destination or S for Stop"},validate=[OneOf(LocationType.list())]
     )
 
 
 class Train(Schema):
-    status = String(metadata={"description": "N for not yet running or R for running"})
+    status = String(validate=[OneOf(TrainStatus.list())], metadata={"description": "N for not yet running or R for running"})
     latitude = Float()
     longitude = Float()
     code = String(
@@ -89,12 +92,12 @@ class Train(Schema):
     date = String()
     public_message = String(
         metadata={
-            "description": "Public Message is the latest information on the train uses"
+            "description": "The latest information on the train uses"
         }
     )
     direction = String(
         metadata={
-            "description": "Direction is either Northbound or Southbound for trains between Dundalk and Rosslare and between Sligo and Dublin.  for all other trains the direction is to the destination eg. To Limerick"
+            "description": "Either Northbound or Southbound for trains between Dundalk and Rosslare and between Sligo and Dublin.  for all other trains the direction is to the destination eg. To Limerick"
         }
     )
 
@@ -105,7 +108,6 @@ class TrainMovement(Schema):
     location_code = String()
     location_full_name = String()
     location_order = Integer()
-    location_type = String()
     train_origin = String()
     train_destination = String()
     scheduled_arrival = String()
@@ -118,7 +120,7 @@ class TrainMovement(Schema):
         metadata={"description": "Was information automatically generated"}
     )
     auto_depart = Boolean()
-    stop_type = String(metadata={"description": "C= Current N = Next"})
+    stop_type = String(metadata={"description": "C for Current, N for Next"}, default=StopType.C, validate=[OneOf(StopType.list())])
 
 
 class StationFilterResult(Schema):

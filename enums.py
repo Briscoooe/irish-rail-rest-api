@@ -14,18 +14,18 @@ class StationType(ExtendedEnum):
     M = "M"  # Mainline
 
 
-class LocationTypeEnum(Enum):
+class LocationType(ExtendedEnum):
     O = "O"  # Origin
     T = "T"  # Timing Point
     S = "S"  # Stop
     D = "D"  # Destination
 
 
-class StopTypeEnum(Enum):
+class StopType(ExtendedEnum):
     C = "C"  # Current
     N = "N"  # Next
 
 
-class TrainStatus(Enum):
+class TrainStatus(ExtendedEnum):
     N = "N"  # Not running yet
     R = "R"  # Running
