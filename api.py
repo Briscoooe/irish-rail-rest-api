@@ -29,10 +29,6 @@ A REST API wrapper around the SOAP API provided by Irish Rail. All documentation
 View on [GitHub](https://github.com/Briscoooe/irish-rail-rest-api)
 """
 
-app.config["EXTERNAL_DOCs"] = {
-    "Irish Rail API": "http://api.irishrail.ie/realtime/",
-    "GitHub": "aa",
-}
 app.config["REDOC_CONFIG"] = {"expandResponses": "200"}
 
 
