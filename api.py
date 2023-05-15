@@ -98,21 +98,11 @@ def search_stations(query):
     },
     location="query",
 )
-# @app.input(
-#     schema={
-#         "code": String(
-#             required=True,
-#             validate=[Length(min=4, max=5)],
-#             metadata={"description": "Station `code`"},
-#         ),
-#     },
-#     location="query",
-# )
 @app.output(schema=StationTimetableItem(many=True))
 @app.doc(
     summary="Get station timetable",
     operation_id="get_station_timetable",
-    description="Returns all trains due to serve the named station in the next `num_mins` minutes.",
+    description="Returns all trains due to serve the station `code` in the next `num_mins` minutes. ",
     tags=["stations"],
 )
 def get_station_timetable(code, query):
@@ -166,7 +156,7 @@ def list_trains(query):
 @app.doc(
     summary="Get train movements",
     operation_id="get_train_movements",
-    description="Returns all stop information for the given train.",
+    description="Returns all stop information for the given train `code`.",
     tags=["trains"],
 )
 def get_train_movements(code: str, query):
