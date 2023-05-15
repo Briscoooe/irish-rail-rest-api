@@ -2,7 +2,7 @@ import datetime
 
 from apiflask import APIFlask
 from marshmallow.fields import Integer, String, DateTime, Date
-from marshmallow.validate import Range
+from marshmallow.validate import Range, Length
 from werkzeug.utils import redirect
 
 import irish_rail_service
@@ -46,7 +46,15 @@ def index():
     schema=StationTypeIn,
     location="query",
 )
-@app.output(Station(many=True))
+@app.output(
+    schema=Station(many=True),
+    links={
+        "get_station_timetable": {
+            "operationId": "get_station_timetable",
+            "parameters": {"code": "$response.body#/code"},
+        },
+    },
+)
 @app.doc(
     operation_id="list_stations",
     description="Returns a list of stations.",
@@ -67,7 +75,7 @@ def list_stations(query):
     },
     location="query",
 )
-@app.output(StationSearchResult(many=True))
+@app.output(schema=StationSearchResult(many=True))
 @app.doc(
     summary="Search stations",
     operation_id="search_stations",
@@ -88,9 +96,19 @@ def search_stations(query):
             metadata={"default": 90},
         ),
     },
+    location="path",
+)
+@app.input(
+    schema={
+        "code": String(
+            required=True,
+            validate=[Length(min=4, max=5)],
+            metadata={"description": "Station code"},
+        ),
+    },
     location="query",
 )
-@app.output(StationTimetableItem(many=True))
+@app.output(schema=StationTimetableItem(many=True))
 @app.doc(
     summary="Get station timetable",
     operation_id="get_station_timetable",
@@ -108,7 +126,15 @@ def get_station_timetable(code, query):
     schema=StationTypeIn,
     location="query",
 )
-@app.output(Train(many=True))
+@app.output(
+    schema=Train(many=True),
+    links={
+        "get_train_movements": {
+            "operationId": "get_train_movements",
+            "parameters": {"code": "$response.body#/code"},
+        },
+    },
+)
 @app.doc(
     summary="List trains",
     operation_id="list_trains",
@@ -136,7 +162,7 @@ def list_trains(query):
     },
     location="query",
 )
-@app.output(TrainMovement(many=True))
+@app.output(schema=TrainMovement(many=True))
 @app.doc(
     summary="Get train movements",
     operation_id="get_train_movements",
