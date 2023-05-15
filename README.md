@@ -9,3 +9,13 @@ Here's a summary of changes
 - All property names are changed to snake_case
 - All date and time properties are converted to ISO 8601 format
 - All enum values are converted to strings
+
+# Breaking changes
+Some query parameters and property names have been changed or removed completely
+- Station `description` has been changed to `name`
+- Search result `description_sp` has been removed
+- Station type values are as follows: 
+  - M has been changed to `mainline`
+  - S has been changed to `stops`
+  - D has been changed to `dart`
+  - A was removed completely and is the default value
