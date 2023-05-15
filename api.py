@@ -96,7 +96,7 @@ def search_stations(query):
             metadata={"default": 90},
         ),
     },
-    location="path",
+    location="query",
 )
 # @app.input(
 #     schema={
