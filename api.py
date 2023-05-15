@@ -98,16 +98,16 @@ def search_stations(query):
     },
     location="path",
 )
-@app.input(
-    schema={
-        "code": String(
-            required=True,
-            validate=[Length(min=4, max=5)],
-            metadata={"description": "Station code"},
-        ),
-    },
-    location="query",
-)
+# @app.input(
+#     schema={
+#         "code": String(
+#             required=True,
+#             validate=[Length(min=4, max=5)],
+#             metadata={"description": "Station `code`"},
+#         ),
+#     },
+#     location="query",
+# )
 @app.output(schema=StationTimetableItem(many=True))
 @app.doc(
     summary="Get station timetable",
