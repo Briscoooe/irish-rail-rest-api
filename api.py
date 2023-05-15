@@ -100,9 +100,7 @@ def search_stations(query):
 def get_station_timetable(code, query):
     if not query:
         query = {"num_mins": 90}
-    return irish_rail_service.get_station_timetable(
-        station_code=code, num_mins=query
-    )
+    return irish_rail_service.get_station_timetable(station_code=code, num_mins=query)
 
 
 @app.get("/trains")
@@ -148,6 +146,4 @@ def list_trains(query):
 def get_train_movements(code: str, query):
     if not query:
         query = {"date": datetime.date.today()}
-    return irish_rail_service.get_train_movements(
-        train_code=code, date=query["date"]
-    )
+    return irish_rail_service.get_train_movements(train_code=code, date=query["date"])

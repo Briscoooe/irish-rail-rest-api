@@ -94,13 +94,27 @@ def get_station_timetable(
         station_timetable_item["query_time"] = datetime.strptime(
             station_timetable_item["query_time"], "%H:%M:%S"
         ).time()
-        station_timetable_item["train_date"] = convert_date_format(station_timetable_item["train_date"])
-        station_timetable_item["origin_time"] = parse_time(station_timetable_item["origin_time"])
-        station_timetable_item["destination_time"] = parse_time(station_timetable_item["destination_time"])
-        station_timetable_item["exp_arrival"] = parse_time(station_timetable_item["exp_arrival"])
-        station_timetable_item["exp_depart"] = parse_time(station_timetable_item["exp_depart"])
-        station_timetable_item["sch_arrival"] = parse_time(station_timetable_item["sch_arrival"])
-        station_timetable_item["sch_depart"] = parse_time(station_timetable_item["sch_depart"])
+        station_timetable_item["train_date"] = convert_date_format(
+            station_timetable_item["train_date"]
+        )
+        station_timetable_item["origin_time"] = parse_time(
+            station_timetable_item["origin_time"]
+        )
+        station_timetable_item["destination_time"] = parse_time(
+            station_timetable_item["destination_time"]
+        )
+        station_timetable_item["exp_arrival"] = parse_time(
+            station_timetable_item["exp_arrival"]
+        )
+        station_timetable_item["exp_depart"] = parse_time(
+            station_timetable_item["exp_depart"]
+        )
+        station_timetable_item["sch_arrival"] = parse_time(
+            station_timetable_item["sch_arrival"]
+        )
+        station_timetable_item["sch_depart"] = parse_time(
+            station_timetable_item["sch_depart"]
+        )
         station_timetable_items.append(station_timetable_item)
     return station_timetable_items
 
@@ -122,7 +136,9 @@ def search_stations(text: str) -> List[Dict[str, str]]:
     return stations
 
 
-def list_trains(station_type: Optional[str] = "A") -> List[Dict[str, Union[str, datetime]]]:
+def list_trains(
+    station_type: Optional[str] = "A",
+) -> List[Dict[str, Union[str, datetime]]]:
     url = f"{API_BASE_URL}/getCurrentTrainsXML_WithTrainType?TrainType={station_type}"
     dom_tree = get_iterable_dom_tree(url)
     trains = []

@@ -26,9 +26,7 @@ class StationTimetableItem(Schema):
             "description": "Long version of Station Name (identical in every record)"
         }
     )
-    id = String(
-        metadata={"description": "4 to 5 letter station abbreviation"}
-    )
+    id = String(metadata={"description": "4 to 5 letter station abbreviation"})
     query_time = Time(
         metadata={"description": "Time the query was made. Format `HH:MM:SS`"}
     )
