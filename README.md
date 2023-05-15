@@ -1,4 +1,4 @@
-An unofficial REST API wrapper for the [Irish Rail Realtime API](http://api.irishrail.ie/realtime/). The current API returns XML across a series of inconsistently named SOAP endpoints and it's not very user-friendly. I used Flask to make a self-documenting OpenAPI REST API around it, making it easier to interact with and get a view of how the different endpoints relate to each other
+An unofficial REST API wrapper for the [Irish Rail Realtime API](http://api.irishrail.ie/realtime/). The current API returns XML across a series of inconsistently named SOAP endpoints and hasn't been updated since 2012. I used Flask to make a self-documenting OpenAPI REST API around it, making it easier to interact with and get a view of how the different endpoints relate to each other
 
 Made using [APIFlask](https://apiflask.com/), deployed on [Fly.io](https://fly.io/).
 
