@@ -3,6 +3,7 @@ import datetime
 from apiflask import APIFlask
 from marshmallow.fields import Integer, String, DateTime
 from marshmallow.validate import Range
+from werkzeug.utils import redirect
 
 import irish_rail_service
 from enums import StationType
@@ -30,6 +31,14 @@ View on [GitHub](https://github.com/Briscoooe/irish-rail-rest-api)
 """
 
 app.config["REDOC_CONFIG"] = {"expandResponses": "200"}
+
+
+@app.get("/")
+@app.doc(
+    hide=True,
+)
+def index():
+    return redirect("/docs")
 
 
 @app.get("/stations")
