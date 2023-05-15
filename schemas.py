@@ -110,18 +110,18 @@ class Train(Schema):
 
 class TrainMovement(Schema):
     code = String()
-    date = Date()
+    date = Date(metadata={"description": "Date in `YYYY-MM-DD` format"})
     location_code = String()
     location_full_name = String()
     location_order = Integer()
     train_origin = String()
     train_destination = String()
-    scheduled_arrival = String()
-    scheduled_departure = String()
-    expected_arrival = String()
-    expected_departure = String()
-    arrival = String(metadata={"description": "Actual arrival time"})
-    departure = String(metadata={"description": "Actual departure time"})
+    scheduled_arrival = Time(metadata={"description": "Format `HH:MM:SS`"})
+    scheduled_departure = Time(metadata={"description": "Format `HH:MM:SS`"})
+    expected_arrival = Time(metadata={"description": "Format `HH:MM:SS`"})
+    expected_departure = Time(metadata={"description": "Format `HH:MM:SS`"})
+    arrival = String(metadata={"description": "Actual arrival time. Format `HH:MM:SS`"})
+    departure = String(metadata={"description": "Actual departure time. Format `HH:MM:SS`"})
     auto_arrival = Boolean(
         metadata={"description": "Was information automatically generated"}
     )

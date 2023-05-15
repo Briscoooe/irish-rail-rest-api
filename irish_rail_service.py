@@ -6,8 +6,6 @@ from defusedxml import ElementTree
 from defusedxml.ElementTree import fromstring
 from requests import Response
 
-from enums import StationType
-
 API_BASE_URL = "http://api.irishrail.ie/realtime/realtime.asmx"
 XML_TAG_PREFIX = "{http://api.irishrail.ie/realtime/}"
 
@@ -22,9 +20,11 @@ def convert_date_format(date_str: str) -> datetime:
     return datetime.strptime(date_str, "%d %b %Y")
 
 
-def parse_time(time_str: str) -> time:
+def parse_time_hh_mm(time_str: str) -> time:
     return datetime.strptime(time_str, "%H:%M").time()
 
+def parse_time_hh_mm_ss(time_str: str) -> time:
+    return datetime.strptime(time_str, "%H:%M:%S").time()
 
 def map_xml_to_dict(
     key_value_mappings: List[Dict[str, str]], dom_element: ElementTree
@@ -97,22 +97,22 @@ def get_station_timetable(
         station_timetable_item["train_date"] = convert_date_format(
             station_timetable_item["train_date"]
         )
-        station_timetable_item["origin_time"] = parse_time(
+        station_timetable_item["origin_time"] = parse_time_hh_mm(
             station_timetable_item["origin_time"]
         )
-        station_timetable_item["destination_time"] = parse_time(
+        station_timetable_item["destination_time"] = parse_time_hh_mm(
             station_timetable_item["destination_time"]
         )
-        station_timetable_item["exp_arrival"] = parse_time(
+        station_timetable_item["exp_arrival"] = parse_time_hh_mm(
             station_timetable_item["exp_arrival"]
         )
-        station_timetable_item["exp_depart"] = parse_time(
+        station_timetable_item["exp_depart"] = parse_time_hh_mm(
             station_timetable_item["exp_depart"]
         )
-        station_timetable_item["sch_arrival"] = parse_time(
+        station_timetable_item["sch_arrival"] = parse_time_hh_mm(
             station_timetable_item["sch_arrival"]
         )
-        station_timetable_item["sch_depart"] = parse_time(
+        station_timetable_item["sch_depart"] = parse_time_hh_mm(
             station_timetable_item["sch_depart"]
         )
         station_timetable_items.append(station_timetable_item)
@@ -186,5 +186,10 @@ def get_train_movements(train_code: str, date: datetime) -> List[Dict[str, str]]
             ],
             movement_el,
         )
+        movement["date"] = convert_date_format(movement["date"])
+        movement["scheduled_arrival"] = parse_time_hh_mm_ss(movement["scheduled_arrival"])
+        movement["scheduled_departure"] = parse_time_hh_mm_ss(movement["scheduled_departure"])
+        movement["expected_arrival"] = parse_time_hh_mm_ss(movement["expected_arrival"])
+        movement["expected_departure"] = parse_time_hh_mm_ss(movement["expected_departure"])
         movements.append(movement)
     return movements
