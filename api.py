@@ -6,11 +6,11 @@ from marshmallow.validate import Range
 from werkzeug.utils import redirect
 
 import irish_rail_service
-from enums import StationType
+from enums import StationType, station_type_map
 from schemas import (
     Station,
-    StationFilterResult,
-    StationInformation,
+    StationSearchResult,
+    StationTimetableItem,
     Train,
     TrainMovement,
     StationTypeIn,
@@ -48,36 +48,37 @@ def index():
 )
 @app.output(Station(many=True))
 @app.doc(
-    operation_id="get_stations",
+    operation_id="list_stations",
     description="Returns a list of stations.",
     tags=["stations"],
-    summary="Get stations",
+    summary="List stations",
 )
-def get_stations(query):
-    if not query:
-        query = {"station_type": StationType.A}
-    return irish_rail_service.get_stations(station_type=query["station_type"])
+def list_stations(query):
+    station_type = query.get("type", None)
+    if station_type:
+        station_type = station_type_map[station_type]
+    return irish_rail_service.list_stations(station_type=station_type)
 
 
-@app.get("/stations/filter")
+@app.get("/stations/search")
 @app.input(
     schema={
         "text": String(required=True),
     },
     location="query",
 )
-@app.output(StationFilterResult(many=True))
+@app.output(StationSearchResult(many=True))
 @app.doc(
-    summary="Filter stations",
-    operation_id="filter_stations",
+    summary="Search stations",
+    operation_id="search_stations",
     description="Returns a list of stations that match the given text.",
     tags=["stations"],
 )
-def filter_stations(query):
-    return irish_rail_service.filter_stations(text=query["text"])
+def search_stations(query):
+    return irish_rail_service.search_stations(text=query["text"])
 
 
-@app.get("/stations/<station_code>/")
+@app.get("/stations/<code>/timetable")
 @app.input(
     schema={
         "num_mins": Integer(
@@ -89,18 +90,18 @@ def filter_stations(query):
     },
     location="query",
 )
-@app.output(StationInformation(many=True))
+@app.output(StationTimetableItem(many=True))
 @app.doc(
-    summary="Get station information",
-    operation_id="get_station_information",
+    summary="Get station timetable",
+    operation_id="get_station_timetable",
     description="Returns all trains due to serve the named station in the next `num_mins` minutes.",
     tags=["stations"],
 )
-def get_station_information(station_code, query):
+def get_station_timetable(code, query):
     if not query:
         query = {"num_mins": 90}
-    return irish_rail_service.get_station_information(
-        station_code=station_code, num_mins=query
+    return irish_rail_service.get_station_timetable(
+        station_code=code, num_mins=query
     )
 
 
@@ -111,18 +112,19 @@ def get_station_information(station_code, query):
 )
 @app.output(Train(many=True))
 @app.doc(
-    summary="Get trains",
-    operation_id="get_trains",
+    summary="List trains",
+    operation_id="list_trains",
     description="Returns a list of of 'running trains' i.e. trains that are between origin and destination or are due to start within 10 minutes of the query time",
     tags=["trains"],
 )
-def get_trains(query):
-    if not query:
-        query = {"station_type": StationType.A}
-    return irish_rail_service.get_trains(station_type=query["station_type"])
+def list_trains(query):
+    station_type = query.get("type", None)
+    if station_type:
+        station_type = station_type_map[station_type]
+    return irish_rail_service.list_trains(station_type=station_type)
 
 
-@app.get("/trains/<train_code>/movements")
+@app.get("/trains/<code>/movements")
 @app.input(
     schema={
         "date": Date(
@@ -143,9 +145,9 @@ def get_trains(query):
     description="Returns all stop information for the given train.",
     tags=["trains"],
 )
-def get_train_movements(train_code: str, query):
+def get_train_movements(code: str, query):
     if not query:
         query = {"date": datetime.date.today()}
     return irish_rail_service.get_train_movements(
-        train_code=train_code, date=query["date"]
+        train_code=code, date=query["date"]
     )

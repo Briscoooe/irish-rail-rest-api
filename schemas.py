@@ -15,7 +15,7 @@ class Station(Schema):
     id = String()
 
 
-class StationInformation(Schema):
+class StationTimetableItem(Schema):
     train_code = String(
         metadata={
             "description": "Irish Rail's unique code for an individual train service on a date"
@@ -26,7 +26,7 @@ class StationInformation(Schema):
             "description": "Long version of Station Name (identical in every record)"
         }
     )
-    station_code = String(
+    id = String(
         metadata={"description": "4 to 5 letter station abbreviation"}
     )
     query_time = Time(
@@ -135,19 +135,14 @@ class TrainMovement(Schema):
     )
 
 
-class StationFilterResult(Schema):
+class StationSearchResult(Schema):
     description = String()
     description_sp = String()
     code = String()
 
 
 class StationTypeIn(Schema):
-    station_type = String(
+    type = String(
         required=False,
-        default=StationType.A,
         validate=[OneOf(StationType.list())],
-        metadata={
-            "description": "A for All, M for Mainline, S for suburban and D for DART",
-            "default": "A",
-        },
     )

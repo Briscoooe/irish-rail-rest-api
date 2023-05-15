@@ -1,5 +1,5 @@
 from datetime import datetime, time
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 
 import requests
 from defusedxml import ElementTree
@@ -39,8 +39,8 @@ def map_xml_to_dict(
     return mapped_dict
 
 
-def get_stations(station_type: StationType) -> List[Dict[str, str]]:
-    url = f"{API_BASE_URL}/getAllStationsXML_WithStationType?StationType={str(station_type)}"
+def list_stations(station_type: Optional[str] = "A") -> List[Dict[str, str]]:
+    url = f"{API_BASE_URL}/getAllStationsXML_WithStationType?StationType={station_type}"
     dom_tree = get_iterable_dom_tree(url)
     stations = []
     for station_el in dom_tree:
@@ -59,14 +59,14 @@ def get_stations(station_type: StationType) -> List[Dict[str, str]]:
     return stations
 
 
-def get_station_information(
+def get_station_timetable(
     station_code: str, num_mins: int
 ) -> List[Dict[str, Union[str, datetime, time]]]:
     url = f"{API_BASE_URL}/getStationDataByCodeXML_WithNumMins?StationCode={station_code}&NumMins={num_mins}"
     dom_tree = get_iterable_dom_tree(url)
-    station_data = []
+    station_timetable_items = []
     for station_el in dom_tree:
-        station = map_xml_to_dict(
+        station_timetable_item = map_xml_to_dict(
             [
                 {"xml_tag": "Traincode", "dict_key": "train_code"},
                 {"xml_tag": "Stationfullname", "dict_key": "station_full_name"},
@@ -91,21 +91,21 @@ def get_station_information(
             ],
             station_el,
         )
-        station["query_time"] = datetime.strptime(
-            station["query_time"], "%H:%M:%S"
+        station_timetable_item["query_time"] = datetime.strptime(
+            station_timetable_item["query_time"], "%H:%M:%S"
         ).time()
-        station["train_date"] = convert_date_format(station["train_date"])
-        station["origin_time"] = parse_time(station["origin_time"])
-        station["destination_time"] = parse_time(station["destination_time"])
-        station["exp_arrival"] = parse_time(station["exp_arrival"])
-        station["exp_depart"] = parse_time(station["exp_depart"])
-        station["sch_arrival"] = parse_time(station["sch_arrival"])
-        station["sch_depart"] = parse_time(station["sch_depart"])
-        station_data.append(station)
-    return station_data
+        station_timetable_item["train_date"] = convert_date_format(station_timetable_item["train_date"])
+        station_timetable_item["origin_time"] = parse_time(station_timetable_item["origin_time"])
+        station_timetable_item["destination_time"] = parse_time(station_timetable_item["destination_time"])
+        station_timetable_item["exp_arrival"] = parse_time(station_timetable_item["exp_arrival"])
+        station_timetable_item["exp_depart"] = parse_time(station_timetable_item["exp_depart"])
+        station_timetable_item["sch_arrival"] = parse_time(station_timetable_item["sch_arrival"])
+        station_timetable_item["sch_depart"] = parse_time(station_timetable_item["sch_depart"])
+        station_timetable_items.append(station_timetable_item)
+    return station_timetable_items
 
 
-def filter_stations(text: str) -> List[Dict[str, str]]:
+def search_stations(text: str) -> List[Dict[str, str]]:
     url = f"{API_BASE_URL}/getStationsFilterXML?StationText={text}"
     dom_tree = get_iterable_dom_tree(url)
     stations = []
@@ -122,8 +122,8 @@ def filter_stations(text: str) -> List[Dict[str, str]]:
     return stations
 
 
-def get_trains(station_type: StationType) -> List[Dict[str, Union[str, datetime]]]:
-    url = f"{API_BASE_URL}/getCurrentTrainsXML_WithTrainType?TrainType={str(station_type)}"
+def list_trains(station_type: Optional[str] = "A") -> List[Dict[str, Union[str, datetime]]]:
+    url = f"{API_BASE_URL}/getCurrentTrainsXML_WithTrainType?TrainType={station_type}"
     dom_tree = get_iterable_dom_tree(url)
     trains = []
     for train_el in dom_tree:

@@ -8,10 +8,16 @@ class ExtendedEnum(Enum):
 
 
 class StationType(ExtendedEnum):
-    A = "A"  # All
-    S = "S"  # Stops
-    D = "D"  # DART
-    M = "M"  # Mainline
+    stops = "stops"  # Stops
+    dart = "dart"  # DART
+    mainline = "mainline"  # Mainline
+
+
+station_type_map = {
+    "stops": "S",
+    "dart": "D",
+    "mainline": "M",
+}
 
 
 class LocationType(ExtendedEnum):
