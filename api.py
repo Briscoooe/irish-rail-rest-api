@@ -79,7 +79,7 @@ def list_stations(query):
 @app.doc(
     summary="Search stations",
     operation_id="search_stations",
-    description="Returns a list of stations that match the given text.",
+    description="Returns a list of stations whose name contains the given `text`.",
     tags=["stations"],
 )
 def search_stations(query):

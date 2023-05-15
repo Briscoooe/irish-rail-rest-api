@@ -7,7 +7,7 @@ from enums import StopType, TrainStatus, LocationType, StationType
 
 
 class Station(Schema):
-    description = String()
+    name = String()
     alias = String()
     latitude = Float()
     longitude = Float()
@@ -134,8 +134,7 @@ class TrainMovement(Schema):
 
 
 class StationSearchResult(Schema):
-    description = String()
-    description_sp = String()
+    name = String()
     code = String()
 
 

@@ -46,7 +46,7 @@ def list_stations(station_type: Optional[str] = "A") -> List[Dict[str, str]]:
     for station_el in dom_tree:
         station = map_xml_to_dict(
             [
-                {"xml_tag": "StationDesc", "dict_key": "description"},
+                {"xml_tag": "StationDesc", "dict_key": "name"},
                 {"xml_tag": "StationAlias", "dict_key": "alias"},
                 {"xml_tag": "StationLatitude", "dict_key": "latitude"},
                 {"xml_tag": "StationLongitude", "dict_key": "longitude"},
@@ -126,8 +126,7 @@ def search_stations(text: str) -> List[Dict[str, str]]:
     for station_el in dom_tree:
         station = map_xml_to_dict(
             [
-                {"xml_tag": "StationDesc", "dict_key": "description"},
-                {"xml_tag": "StationDesc_sp", "dict_key": "description_sp"},
+                {"xml_tag": "StationDesc", "dict_key": "name"},
                 {"xml_tag": "StationCode", "dict_key": "code"},
             ],
             station_el,
