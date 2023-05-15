@@ -12,7 +12,7 @@ Here's a summary of changes
 
 # Breaking changes
 Some query parameters and property names have been changed or removed completely
-- Station `description` has been changed to `name`
+- Station and Search result `description` has been changed to `name`
 - Search result `description_sp` has been removed
 - Station type values are as follows: 
   - M has been changed to `mainline`
