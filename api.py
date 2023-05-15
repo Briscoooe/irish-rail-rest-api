@@ -1,7 +1,7 @@
 import datetime
 
 from apiflask import APIFlask
-from marshmallow.fields import Integer, String, DateTime
+from marshmallow.fields import Integer, String, DateTime, Date
 from marshmallow.validate import Range
 from werkzeug.utils import redirect
 
@@ -125,7 +125,7 @@ def get_trains(query):
 @app.get("/trains/<train_code>/movements")
 @app.input(
     schema={
-        "date": DateTime(
+        "date": Date(
             required=False,
             default=datetime.datetime.now().strftime("%Y-%m-%d"),
             metadata={
