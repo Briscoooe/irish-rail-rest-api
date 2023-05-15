@@ -23,8 +23,10 @@ def convert_date_format(date_str: str) -> datetime:
 def parse_time_hh_mm(time_str: str) -> time:
     return datetime.strptime(time_str, "%H:%M").time()
 
+
 def parse_time_hh_mm_ss(time_str: str) -> time:
     return datetime.strptime(time_str, "%H:%M:%S").time()
+
 
 def map_xml_to_dict(
     key_value_mappings: List[Dict[str, str]], dom_element: ElementTree
@@ -187,9 +189,15 @@ def get_train_movements(train_code: str, date: datetime) -> List[Dict[str, str]]
             movement_el,
         )
         movement["date"] = convert_date_format(movement["date"])
-        movement["scheduled_arrival"] = parse_time_hh_mm_ss(movement["scheduled_arrival"])
-        movement["scheduled_departure"] = parse_time_hh_mm_ss(movement["scheduled_departure"])
+        movement["scheduled_arrival"] = parse_time_hh_mm_ss(
+            movement["scheduled_arrival"]
+        )
+        movement["scheduled_departure"] = parse_time_hh_mm_ss(
+            movement["scheduled_departure"]
+        )
         movement["expected_arrival"] = parse_time_hh_mm_ss(movement["expected_arrival"])
-        movement["expected_departure"] = parse_time_hh_mm_ss(movement["expected_departure"])
+        movement["expected_departure"] = parse_time_hh_mm_ss(
+            movement["expected_departure"]
+        )
         movements.append(movement)
     return movements

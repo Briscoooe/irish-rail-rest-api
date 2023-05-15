@@ -121,7 +121,9 @@ class TrainMovement(Schema):
     expected_arrival = Time(metadata={"description": "Format `HH:MM:SS`"})
     expected_departure = Time(metadata={"description": "Format `HH:MM:SS`"})
     arrival = String(metadata={"description": "Actual arrival time. Format `HH:MM:SS`"})
-    departure = String(metadata={"description": "Actual departure time. Format `HH:MM:SS`"})
+    departure = String(
+        metadata={"description": "Actual departure time. Format `HH:MM:SS`"}
+    )
     auto_arrival = Boolean(
         metadata={"description": "Was information automatically generated"}
     )
