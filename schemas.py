@@ -97,7 +97,7 @@ class Train(Schema):
             "description": "Irish Rail's unique code for an individual train service on a date"
         }
     )
-    date = String()
+    date = Date()
     public_message = String(
         metadata={"description": "The latest information on the train uses"}
     )
@@ -110,7 +110,7 @@ class Train(Schema):
 
 class TrainMovement(Schema):
     code = String()
-    date = String()
+    date = Date()
     location_code = String()
     location_full_name = String()
     location_order = Integer()

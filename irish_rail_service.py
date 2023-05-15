@@ -56,7 +56,7 @@ def list_stations(station_type: Optional[str] = "A") -> List[Dict[str, str]]:
             station_el,
         )
         stations.append(station)
-    return stations
+    return sorted(stations, key=lambda k: k["name"])
 
 
 def get_station_timetable(
@@ -132,7 +132,7 @@ def search_stations(text: str) -> List[Dict[str, str]]:
             station_el,
         )
         stations.append(station)
-    return stations
+    return sorted(stations, key=lambda k: k["name"])
 
 
 def list_trains(

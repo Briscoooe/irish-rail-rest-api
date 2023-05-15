@@ -35,3 +35,4 @@ class StopType(ExtendedEnum):
 class TrainStatus(ExtendedEnum):
     N = "N"  # Not running yet
     R = "R"  # Running
+    T = "T"  # Terminated
